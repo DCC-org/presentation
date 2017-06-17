@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Network Design Principles - Tim Meusel </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(//fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+         body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        -moz-border-radius: 5px;
+        -web-border-radius: 5px;
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+        color: #000;
+      }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+      .right-column-center {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+        text-align: center;
+      }
+      .right-column img {
+        width: 100%;
+      }
+      @page {
+        size: 1024px 786px;
+        margin: 0;
+      }
+      @media print {
+        .remark-slide-scaler {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1) !important;
+          top: 0 !important;
+          left: 0 !important;
+          size: 1024px 786px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle, inverse
+
+# DCC
+
+---
+
+class: center, middle, inverse
+
+# Datawarehousing for Cloud Computing Metrics
+
+---
+
+## Content
+
+* Dynamic Routing Protocols
+
+  * BGP
+
+  * OSPF
+
+* Logical Network Design
+
+  * Switched
+
+  * Statically Routed
+
+  * Dynamically Routed
+
+---
+
+background-image: url(cloud.jpg)
+
+---
+
+.left-column[
+## Dynamic Routing
+]
+
+.right-column[
+
+* Why?
+
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+]
+
+.right-column[
+
+* Handle failover
+
+* Discover remote networks
+
+* Choose the best path to the destination
+
+* Lower configuration costs
+
+* Lower failure points?
+
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+]
+
+.right-column[
+
+![Right-aligned image](igp_egp.svg)
+
+* IGP = Interior Gateway Protocol
+
+* EGP = Exterior Gateway Protocol
+
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+]
+
+.right-column[
+
+* Border Gateway Protocol
+
+* Distance Vector Routing Protocol
+
+* EGP
+
+* Aggregates all vectors to the most simple one
+
+* Pushes updates based on events
+
+* Only talks to direct peers
+
+* Prevents routing loops by checking the AS-Path
+
+* Announces the configured routing table
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+
+]
+
+.right-column[
+
+ Distance Vector Routing
+
+![Right-aligned image](distance-vector-simple.svg)
+
+    Element | Vector
+    ------- | ----------------------------
+    AS24940 | AS3320
+    AS24940 | AS3320 -> AS20773 -> AS13335
+    AS24940 | AS3320 -> AS20773 -> AS1299
+    AS24940 | AS1299
+    AS24940 | AS1299 -> AS13335
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+
+]
+
+.right-column[
+
+![Right-aligned image](distance-vector-real-ipv4.png)
+
+.footnote[&copy; http://bgp.he.net/AS24941#_asinfo]
+
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+
+]
+
+.right-column[
+
+![Right-aligned image](distance-vector-real-ipv6.png)
+
+.footnote[&copy; http://bgp.he.net/AS24940#_asinfo]
+
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+
+]
+
+.right-column[
+
+Route Selection
+
+* Ignores Link-State
+
+* Ignores Hop Count
+
+* Honors AS-Path
+
+* Honors propritary values
+]
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+### OSPF
+]
+
+.right-column[
+
+* Open Shortest Path First
+
+* Link-state routing protocol
+
+* IGP
+
+* Interval based
+]
+
+---
+
+.left-column[
+## Dynamic Routing
+### BGP
+### OSPF
+]
+
+.right-column[
+
+Link-state routing
+
+* Every router in an AS talks to every other
+
+* Uses SPF to create a tree
+
+* Periodically sends a flood
+
+  * Causes a huge amount of traffic
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+]
+
+.right-column[
+
+![Right-aligned image](switched_1.svg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+]
+
+.right-column[
+
+![Right-aligned image](switched_2.svg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+]
+
+.right-column[
+
+![Right-aligned image](switched_3.svg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+]
+
+.right-column[
+
+![Right-aligned image](switched_4.svg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+]
+
+.right-column[
+
+* Many SPOF, unable to mesh
+
+  * would create loops
+
+* CAM table size is limited
+
+  * Content Addressable Memory = MAC table
+
+* All switches hold up all MAC addresses in the same Layer2/VLAN
+
+  * limit is around ~512-4096 addresses per device
+
+  * Juniper EX2200-48T: 16.000 entries, 864€
+
+  * Juniper EX3200-48T (EOL): 32.000 entries, 1975€
+
+  * TP-Link T3700G-28TQ: 32.000 entries, 1698€
+
+  * Netgear GS724Tv4: 16.000 entries, 150€
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+]
+
+.right-column[
+
+![Right-aligned image](routed_1.svg)
+
+* One Subnet for each switch
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+]
+
+.right-column[
+
+* Static routes configured on all switches
+
+* Works fine on Layer 2 until there are VLANs across routers
+
+  * CAM tables will again be too big
+
+* Requires manual configuration for routes
+
+* Redundant ring
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+* Less stuff to configure by hand
+
+* Better failover for new links
+
+* TOR switch for hypervisors is still a bottleneck
+
+* We could use OSPF or RIP
+
+]
+
+---
+
+background-image: url(dog.jpg)
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+![Right-aligned image](scaling.jpg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+![Right-aligned image](routed_2.svg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+![Right-aligned image](cisco-leaf-spine.png)
+
+* 16 Racks
+
+* 16 Switches
+
+* 8 Routers
+
+* 16*40 = 640 Servers
+
+* 640 * 100 = 64.000 Virtual Machines
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+* Impossible to have 64.000 Virtual Machines + Hypervisors in the same Layer 2
+
+  * Would require switches with 64,000 MAC entries
+
+  * Juniper EX92008, 8RU, ~45.000€, per rack
+
+* Dynamic routing protocols route prefixes to a next hop
+
+* Normally used to route nets to a router
+
+* You can route to any IP address?
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+![Right-aligned image](wat.jpg)
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+BGP as IGP
+
+* Bad: Every router would talk to every other router (fully meshed)
+
+  * Fine for small networks, doesn't work in this size
+
+  * Each hypervisor will act as a router
+
+* Bad: Needs something to get the routing table
+
+  * "Announces the configured routing table" - Slide 7
+
+* Nice: Simple Table of: Sourcenet -> Next Hop
+
+]
+
+---
+
+.left-column[
+##Logical Network Design
+### Switched
+### Statically Routed
+### Dynamically Routed
+]
+
+.right-column[
+
+BGP route reflector
+
+![Right-aligned image](routed_3.svg)
+
+* Everybody sends updates to a central router
+
+* Router pushes updates to all routers that need this information
+
+]
+
+---
+
+.left-column[
+## Conclusion
+]
+
+.right-column[
+
+* Dynamic routing is fun
+
+* OSPF is fine for announcing hypervisor networks
+
+* BGP is perfect for cloud
+
+* Don't trust vendors for CAM table size
+
+.footnote[&copy; Tim 'bastelfreak' Meusel]
+]
+
+    </textarea>
+    <script src="remark-latest.min.js"></script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
