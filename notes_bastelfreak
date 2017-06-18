@@ -1,0 +1,49 @@
+# Notes
+
+## Managment
+
+* Scrum am weitesten verbreitet in der Wirtschaft
+* Anforderungen an Projektmanagementlösungen
+  * Unvorhersehbar
+  * Schnell wechselnde anforderungen
+* Standups
+* Darf man nur Scrum nennen wenn man alles genau so macht
+
+## Agil
+
+* Pool aus Methoden die in Scrum und Kanban genutzt werden
+* Man nutzt was am besten passt, lässt rest weg
+* Puppet
+
+## Werkzeuge
+
+## Realisierung
+
+* collectd auf hypervisors sammelt metriken
+* werden an beliebig viele logstash instanzen geschickt
+  * cached eingehende daten, aufbereitung
+* Postgresql tabelle mit json als bus
+* Daten von dort per ETL prozess in finale tabellen
+* API RESTFul schema angelehnt, CRUD support
+* Alles mit Puppet
+
+## Datenerfassung
+
+* Input Plugin
+  * Pro format ein plugin
+  * Collectd kann ausgetauscht werden
+* Filter plugin
+  * Serialisierung
+  * XML -> JSON
+  * Einheitliches Datumsformat
+* Outputplugin
+  * Jedes Backend ansprechbar
+  *
+
+# Risikos
+
+ threshold
+ strich?
+ warum userstories? de
+
+ bild erst später einbinden
